@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+
+{% block content %}
+<div class="container mt-3">
+    
+<table class="table table-bordered border-primary">
+    <thead>
+        <tr>
+            <td>№</td> 
+            <td>Mahalla</td> 
+            <td>Sektor</td> 
+            <td>Ko'chalar soni</td> 
+            <td>Yakka tartibdagi xonadonlar soni</td> 
+            <td>Ko'p qavatli uylar soni</td> 
+            <td>Xonadonlar soni</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in object.mahalla_set.all %}
+        <tr>
+            <td>{{ forloop.counter }}</td> 
+            <td> <a href="{{ row.get_absolute_url }}" style="text-decoration: none;">{{ row }}</a></td>
+            <td>{{ row.section }}</td> 
+            <td>{{ row.street_set.count }}</td> 
+            <td>{{ row.houses_level1.count }}</td> 
+            <td>{{ row.houses_level2.count }}</td> 
+            <td>{{ row.houses.count }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock content %} 
