@@ -18,3 +18,10 @@ class DistrictDetailView(generic.DetailView):
 
 class MahallaDetailView(generic.DetailView):
     queryset = models.Mahalla.objects.all()
+
+class StreetDetailView(generic.DetailView):
+    queryset = models.Street.objects.all()
+
+
+class HouseDetailView(generic.DetailView):
+    queryset = models.House.objects.all()

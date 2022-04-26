@@ -1,11 +1,6 @@
 from django.db import models
 from django.urls import reverse
-
-
-class GenderChoices(models.TextChoices):
-    NULL = 'null', "----"
-    MAN = 'man', "Erkak"
-    WOMAN = 'woman', "Ayol"
+from .choices import *
 
 
 class Person(models.Model):
@@ -24,10 +19,9 @@ class Person(models.Model):
     def get_full_name(self):
         return "%s %s %s" % (self.first_name, self.last_name, self.middle_name)
 
-
-class FamilyStatusChoices(models.TextChoices):
-    POOR = 'poor', "Kam tamillangan"
-    SIMPLE = 'simple', "Oddiy"
+    class Meta:
+        verbose_name = 'Fuqoro'
+        verbose_name_plural = verbose_name
 
 
 class Family(models.Model):
@@ -39,6 +33,10 @@ class Family(models.Model):
     def __str__(self) -> str:
         return self.name
     
+    class Meta:
+        verbose_name = 'Oila'
+        verbose_name_plural = verbose_name
+
 
 class FamilyMember(models.Model):
     """Oila a`zolar"""
@@ -46,9 +44,13 @@ class FamilyMember(models.Model):
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
     is_owner = models.BooleanField(default=False)
 
+    class Meta:
+        verbose_name = 'Oila a`zolari'
+        verbose_name_plural = verbose_name
+
 
 class House(models.Model):
-    """Honadon"""
+    """Xonadon"""
     families = models.ManyToManyField(Family, blank=True)
     number = models.CharField(max_length=128)
     level = models.IntegerField(default=1)
@@ -56,6 +58,14 @@ class House(models.Model):
 
     def __str__(self) -> str:
         return self.number
+
+
+    class Meta:
+        verbose_name = 'Xonadon'
+        verbose_name_plural = verbose_name
+
+    def get_absolute_url(self):
+        return reverse('house-detail', kwargs={'pk': self.id, 'street_pk': self.street.id})
 
 
 class Street(models.Model):
@@ -66,13 +76,12 @@ class Street(models.Model):
     def __str__(self) -> str:
         return self.name
 
+    class Meta:
+        verbose_name = 'Ko`cha'
+        verbose_name_plural = verbose_name
 
-
-class MahallaSectionChoices(models.TextChoices):
-    I = 'I', '1-sektor'
-    II = 'II', '2-sektor'
-    III = 'III', '3-sektor'
-    IV = 'IV', '4-sektor'
+    def get_absolute_url(self):
+        return reverse('street-detail', kwargs={'pk': self.id, 'mahalla_pk': self.mahalla.id})
 
 
 
@@ -87,7 +96,7 @@ class Mahalla(models.Model):
     def __str__(self) -> str:
         return self.name
     
-
+ 
     def houses(self):
         return House.objects.filter(
             street_id__in=self.street_set.all().values_list('id', flat=True)
@@ -104,6 +113,9 @@ class Mahalla(models.Model):
     def get_absolute_url(self):
         return reverse('mahalla-detail', kwargs={'pk': self.id, 'district_pk': self.district.id})
 
+    class Meta:
+        verbose_name = 'Mahalla'
+        verbose_name_plural = verbose_name
 
 
 class District(models.Model):
@@ -133,3 +145,7 @@ class District(models.Model):
 
     def get_absolute_url(self):
         return reverse('district-detail', kwargs={'pk': self.id})
+
+    class Meta:
+        verbose_name = 'Tuman'
+        verbose_name_plural = verbose_name

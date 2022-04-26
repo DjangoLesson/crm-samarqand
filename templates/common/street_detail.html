@@ -9,7 +9,7 @@
     <thead>
         <tr>
             <td>№</td> 
-            <td>Ko'chalar</td> 
+            <td>Uylar</td> 
             <td>Sektor</td> 
             <td>Ko'chalar soni</td> 
             <td>Yakka tartibdagi xonadonlar soni</td> 
@@ -18,7 +18,7 @@
         </tr>
     </thead>
     <tbody>
-        {% for row in object.street_set.all %}
+        {% for row in object.houses_set.all %}
         <tr>
             <td>{{ forloop.counter }}</td> 
             <td><a href="{{ row.get_absolute_url }}" style="text-decoration: none;">{{ row }}</a></td> 
@@ -26,7 +26,7 @@
             <td>{{ row.street_set.count }}</td> 
             <td>{{ row.houses_level1.count }}</td> 
             <td>{{ row.houses_level2.count }}</td> 
-            <td>{{ row.house.count }}</td>
+            <td>{{ row.houses.count }}</td>
         </tr>
         {% endfor %}
     </tbody>
